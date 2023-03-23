@@ -4,16 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import java.util.*;
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class User {
-    private long id;
-    private String email;
-
-    private String name;
-
-    private String password;
+@AllArgsConstructor
+public class QuizAnswer {
+    private int userId;
+    private int quizId;
+    private List<String> answer;
 }
