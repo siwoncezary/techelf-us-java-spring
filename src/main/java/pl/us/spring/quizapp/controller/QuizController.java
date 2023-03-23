@@ -6,7 +6,7 @@ import pl.us.spring.quizapp.dto.QuizDto;
 import pl.us.spring.quizapp.mapper.QuizMapper;
 import pl.us.spring.quizapp.model.Feedback;
 import pl.us.spring.quizapp.model.Quiz;
-import pl.us.spring.quizapp.model.QuizAnswer;
+import pl.us.spring.quizapp.dto.QuizAnswerDto;
 import pl.us.spring.quizapp.repository.QuizRepositoryInMemory;
 import pl.us.spring.quizapp.service.QuizService;
 
@@ -15,17 +15,15 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/v1/quizzes/")
 public class QuizController {
-    private final QuizRepositoryInMemory quizRepository;
     private final QuizService quizService;
 
-    public QuizController(QuizRepositoryInMemory quizRepository, QuizService quizService) {
-        this.quizRepository = quizRepository;
+    public QuizController(QuizService quizService) {
         this.quizService = quizService;
     }
 
     @PostMapping("")
     public ResponseEntity<Quiz> createQuiz(@RequestBody Quiz quiz){
-        final Quiz saved = quizRepository.save(quiz);
+        final Quiz saved = quizService.saveQuiz(quiz);
         return ResponseEntity
                 .created(URI.create("/api/v1/quizzes/" + saved.getId()))
                 .body(saved);
@@ -33,8 +31,8 @@ public class QuizController {
 
     @GetMapping("")
     public List<QuizDto> getQuizzes(){
-        return quizRepository
-                .findAll()
+        return quizService
+                .findAllQuizzes()
                 .stream()
                 .map(QuizMapper::mapToDto)
                 .toList();
@@ -42,20 +40,20 @@ public class QuizController {
 
     @GetMapping("{id}")
     public ResponseEntity<QuizDto> getQuiz(@PathVariable long id){
-        return ResponseEntity.of(quizRepository.findById(id).map(QuizMapper::mapToDto));
+        return ResponseEntity.of(quizService.findQuizById(id).map(QuizMapper::mapToDto));
     }
 
 
 
     @PostMapping("{quizId}/answers")
-    public boolean getQuizAnswerFeedback(@PathVariable long quizId, @RequestBody QuizAnswer answer){
+    public boolean getQuizAnswerFeedback(@PathVariable long quizId, @RequestBody QuizAnswerDto answer){
         return quizService.getFeedbackForAnswer(answer);
     }
 
     @PostMapping("{quizId}/feedback")
     public ResponseEntity<Feedback> getQuizFeedback(
             @PathVariable long quizId,
-            @RequestBody QuizAnswer answer){
+            @RequestBody QuizAnswerDto answer){
         if (quizId != answer.getQuizId()){
             return ResponseEntity.badRequest().build();
         }

@@ -3,10 +3,10 @@ package pl.us.spring.quizapp.service;
 import org.springframework.stereotype.Service;
 import pl.us.spring.quizapp.model.Feedback;
 import pl.us.spring.quizapp.model.Quiz;
-import pl.us.spring.quizapp.model.QuizAnswer;
+import pl.us.spring.quizapp.dto.QuizAnswerDto;
 import pl.us.spring.quizapp.repository.QuizRepositoryInMemory;
 
-import java.util.Objects;
+import java.util.List;
 import java.util.Optional;
 import pl.us.spring.quizapp.model.User;
 @Service
@@ -25,7 +25,7 @@ public class QuizServiceInMemory implements QuizService{
     }
 
     @Override
-    public boolean getFeedbackForAnswer(QuizAnswer answer) {
+    public boolean getFeedbackForAnswer(QuizAnswerDto answer) {
         final Optional<Quiz> optionalQuiz = quizRepository.findById(answer.getQuizId());
         if (optionalQuiz.isEmpty()){
             return false;
@@ -40,7 +40,17 @@ public class QuizServiceInMemory implements QuizService{
     }
 
     @Override
-    public Feedback getFeebackForAnswerByUser(QuizAnswer answer) {
+    public List<Quiz> findAllQuizzes() {
+        return quizRepository.findAll();
+    }
+
+    @Override
+    public Optional<Quiz> findQuizById(long id) {
+        return quizRepository.findById(id);
+    }
+
+    @Override
+    public Feedback getFeebackForAnswerByUser(QuizAnswerDto answer) {
         final Optional<Quiz> optionalQuiz = quizRepository.findById(answer.getQuizId());
         if (optionalQuiz.isEmpty()){
             return Feedback.builder()
@@ -69,5 +79,10 @@ public class QuizServiceInMemory implements QuizService{
                 .percent(percent)
                 .message(percent > 99 ? "Success!":"Fail")
                 .build();
+    }
+
+    @Override
+    public Quiz saveQuiz(Quiz quiz) {
+        return quizRepository.save(quiz);
     }
 }
