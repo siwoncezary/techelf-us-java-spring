@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.us.spring.quizapp.dto.QuizDto;
 import pl.us.spring.quizapp.mapper.QuizMapper;
+import pl.us.spring.quizapp.model.Feedback;
 import pl.us.spring.quizapp.model.Quiz;
 import pl.us.spring.quizapp.model.QuizAnswer;
 import pl.us.spring.quizapp.repository.QuizRepositoryInMemory;
@@ -39,8 +40,25 @@ public class QuizController {
                 .toList();
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<QuizDto> getQuiz(@PathVariable long id){
+        return ResponseEntity.of(quizRepository.findById(id).map(QuizMapper::mapToDto));
+    }
+
+
+
     @PostMapping("{quizId}/answers")
     public boolean getQuizAnswerFeedback(@PathVariable long quizId, @RequestBody QuizAnswer answer){
         return quizService.getFeedbackForAnswer(answer);
+    }
+
+    @PostMapping("{quizId}/feedback")
+    public ResponseEntity<Feedback> getQuizFeedback(
+            @PathVariable long quizId,
+            @RequestBody QuizAnswer answer){
+        if (quizId != answer.getQuizId()){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(quizService.getFeebackForAnswerByUser(answer));
     }
 }

@@ -61,10 +61,13 @@ public class QuizServiceInMemory implements QuizService{
                 points++;
             }
         }
+        //TODO popraw logikę, aby ograniczyć nadużycia przy przesyłaniu wielu odpowiedzi
+        //TODO liczba odpowiedzi w answer nie powinna być większą od liczby odpowiedzi w quiz
+        double percent = 100 * points / (double) quiz.getCorrectOptions().size();
         return Feedback
                 .builder()
-                .percent(points/(double) quiz.getCorrectOptions().size())
-                .message(points > 99 ?"Success!":"Fail")
+                .percent(percent)
+                .message(percent > 99 ? "Success!":"Fail")
                 .build();
     }
 }

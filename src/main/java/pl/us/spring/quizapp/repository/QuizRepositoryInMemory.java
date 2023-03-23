@@ -50,4 +50,17 @@ public class QuizRepositoryInMemory {
         data.put(quiz.getId(), quiz);
         return quiz;
     }
+
+    public Quiz remove(long id){
+        return data.remove(id);
+    }
+
+    public Quiz update(Quiz quiz){
+        final Optional<Quiz> optionalQuiz = findById(quiz.getId());
+        if (optionalQuiz.isPresent()){
+            return data.put(quiz.getId(), quiz);
+        } else {
+            return null;
+        }
+    }
 }
