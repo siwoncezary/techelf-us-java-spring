@@ -1,6 +1,7 @@
 package pl.us.spring.quizapp.controller;
 
 import org.springframework.web.bind.annotation.*;
+import pl.us.spring.quizapp.model.User;
 
 @RestController
 public class HomeController {
@@ -15,8 +16,8 @@ public class HomeController {
 
 
     @PostMapping("/")
-    public String registerUser(@RequestParam String name){
-
+    public String registerUser(@RequestBody User user){
+        return String.format("%s %s %s", user.getName(), user.getEmail(), user.getPassword());
     }
 
 
