@@ -4,9 +4,10 @@ package pl.us.spring.quizapp.controller;
 // - metoda dodania użytkownika
 // - metoda pobierania wszystkich użytkowników
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import pl.us.spring.quizapp.dto.RequestUserDto;
 import pl.us.spring.quizapp.dto.ResponseUserDto;
 import pl.us.spring.quizapp.model.User;
@@ -22,7 +23,8 @@ public class UserController {
         this.service = service;
     }
 
-    public ResponseEntity<ResponseUserDto> registerUser(RequestUserDto dto){
+    @PostMapping("")
+    public ResponseEntity<ResponseUserDto> registerUser(@Valid @RequestBody RequestUserDto dto){
         final User register = service.register(dto);
         return ResponseEntity.ok(
                 ResponseUserDto
@@ -32,6 +34,4 @@ public class UserController {
                         .build()
         );
     }
-
-
 }
