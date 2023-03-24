@@ -75,4 +75,19 @@ public class QuizServiceJpa implements QuizService{
     public Quiz saveQuiz(Quiz quiz) {
         return quizRepository.save(quiz);
     }
+
+    @Override
+    public Quiz update(Quiz quiz) {
+        final Optional<Quiz> optionalQuiz = quizRepository.findById(quiz.getId());
+        if (optionalQuiz.isPresent()) {
+            return quizRepository.save(quiz);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void remove(long id) {
+        quizRepository.deleteById(id);
+    }
 }

@@ -85,4 +85,14 @@ public class QuizServiceInMemory implements QuizService{
     public Quiz saveQuiz(Quiz quiz) {
         return quizRepository.save(quiz);
     }
+
+    @Override
+    public Quiz update(Quiz quiz) {
+        return null;
+    }
+
+    @Override
+    public void remove(long id) {
+
+    }
 }

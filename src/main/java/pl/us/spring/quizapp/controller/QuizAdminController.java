@@ -10,27 +10,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.us.spring.quizapp.model.Quiz;
 import pl.us.spring.quizapp.repository.QuizRepositoryInMemory;
+import pl.us.spring.quizapp.service.QuizService;
 
 import java.util.Optional;
 
 @RestController
 public class QuizAdminController {
 
-    private final QuizRepositoryInMemory quizRepository;
+    private final QuizService quizService;
 
     @Autowired
-    public QuizAdminController(QuizRepositoryInMemory quizRepository) {
-        this.quizRepository = quizRepository;
+    public QuizAdminController(QuizService quizService) {
+
+        this.quizService = quizService;
     }
 
     @DeleteMapping("/api/v1/admin/quizzes/{id}")
     public ResponseEntity<Quiz> deleteQuiz(@PathVariable long id){
-        var q = quizRepository.remove(id);
-        if (q == null){
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(q);
-        }
+        quizService.remove(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/api/v1/admin/quizzes/{id}")
@@ -41,7 +39,7 @@ public class QuizAdminController {
         if (id != quiz.getId()){
             return ResponseEntity.badRequest().build();
         } else {
-            final Quiz update = quizRepository.update(quiz);
+            final Quiz update = quizService.update(quiz);
             return update == null
                     ? ResponseEntity.notFound().build()
                     : ResponseEntity.ok(update);
@@ -50,7 +48,7 @@ public class QuizAdminController {
 
     @PatchMapping(value = "/api/v1/admin/quizzes/{id}", consumes = "application/merge-patch+json")
     public ResponseEntity<Quiz> pathQuiz(@PathVariable long id, @RequestBody JsonPatch pathedQuiz){
-        final Optional<Quiz> optionalQuiz = quizRepository.findById(id);
+        final Optional<Quiz> optionalQuiz = quizService.findQuizById(id);
         if (optionalQuiz.isEmpty()){
             return ResponseEntity.notFound().build();
         }
@@ -60,7 +58,7 @@ public class QuizAdminController {
         try {
             final JsonNode applied = pathedQuiz.apply(jsonQuiz);
             final Quiz actualQuiz = mapper.treeToValue(applied, Quiz.class);
-            quizRepository.update(actualQuiz);
+            quizService.update(actualQuiz);
             return ResponseEntity.ok(actualQuiz);
         } catch (JsonPatchException | JsonProcessingException e) {
             return ResponseEntity.badRequest().build();

@@ -16,4 +16,8 @@ public interface QuizService {
     Feedback getFeebackForAnswerByUser(QuizAnswerDto answer);
 
     Quiz saveQuiz(Quiz quiz);
+
+    Quiz update(Quiz quiz);
+
+    void remove(long id);
 }
