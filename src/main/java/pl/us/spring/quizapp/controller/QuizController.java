@@ -1,5 +1,6 @@
 package pl.us.spring.quizapp.controller;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.us.spring.quizapp.dto.QuizDto;

@@ -8,6 +8,8 @@ import pl.us.spring.quizapp.model.User;
 import pl.us.spring.quizapp.repository.QuizRepository;
 import pl.us.spring.quizapp.repository.UserRepository;
 
+import java.util.List;
+
 @SpringBootApplication
 public class QuizAppApplication implements CommandLineRunner {
     private final UserRepository userRepository;
@@ -38,7 +40,9 @@ public class QuizAppApplication implements CommandLineRunner {
             quizRepository.save(
                     Quiz.builder()
                             .id(1L)
-                            .title("Dodawnie")
+                            .correctOptionsAsString("5")
+                            .incorrectOptionsAsString("6|7|8")
+                            .title("Dodawanie")
                             .question("2 + 3 = ?")
                             .build()
             );
@@ -49,6 +53,8 @@ public class QuizAppApplication implements CommandLineRunner {
                             .id(2L)
                             .title("Odejmowanie")
                             .question("8 - 3 = ?")
+                            .incorrectOptionsAsString("6|8|7")
+                            .correctOptionsAsString("5")
                             .build()
             );
         }
