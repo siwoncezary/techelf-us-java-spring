@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Dodaj adnotacje encji nad klasą Quiz,
+ * utwórz repozytorium i dodaj dwa quizy w metodzie run
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,7 +23,7 @@ public class Quiz implements Serializable {
 
     private String title;
 
-    private List<String> incorrectOptions;
+    transient private List<String> incorrectOptions;
 
-    private List<String> correctOptions;
+    transient private List<String> correctOptions;
 }

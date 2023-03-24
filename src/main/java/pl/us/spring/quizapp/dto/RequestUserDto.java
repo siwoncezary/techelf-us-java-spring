@@ -3,7 +3,6 @@ package pl.us.spring.quizapp.dto;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.pl.PESEL;
 
 import java.io.Serializable;
 
@@ -21,7 +20,4 @@ public class RequestUserDto implements Serializable {
 
     @Email
     public String email;
-
-    @PESEL
-    public String pesel;
 }
